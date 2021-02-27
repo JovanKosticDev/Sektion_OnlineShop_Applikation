@@ -1,6 +1,7 @@
 package com.example.javaonlineshop;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
+
+import static com.example.javaonlineshop.GroceryItemActivity.GROCERY_ITEM_KEY;
 
 public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.ViewHolder>{
 
@@ -42,7 +45,9 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 26.02.2021  Navigiere den User zu der Grocery Item Activity
+                Intent intent = new Intent(context, GroceryItemActivity.class);
+                intent.putExtra(GROCERY_ITEM_KEY, items.get(position));
+                context.startActivity(intent);
             }
         });
     }

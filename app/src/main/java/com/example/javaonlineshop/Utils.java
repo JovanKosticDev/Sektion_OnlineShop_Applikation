@@ -69,6 +69,27 @@ public class Utils {
         return allItems;
     }
 
+    public static void changeRate(Context context, int itemId, int newRate){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(DB_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        ArrayList<GroceryItem> allItems = gson.fromJson(sharedPreferences.getString(ALL_ITEMS_KEY, null), groceryListType);
+        if(null != allItems){
+            ArrayList<GroceryItem> newItems = new ArrayList<>();
+            for(GroceryItem i: allItems){
+                if(i.getId() == itemId){
+                    i.setRate(newRate);
+                    newItems.add(i);
+                }else{
+                    newItems.add(i);
+                }
+            }
+            editor.remove(ALL_ITEMS_KEY);
+            editor.putString(ALL_ITEMS_KEY, gson.toJson(newItems));
+            editor.commit();
+        }
+
+    }
+
     public static int getID() {
         ID++;
         return ID;

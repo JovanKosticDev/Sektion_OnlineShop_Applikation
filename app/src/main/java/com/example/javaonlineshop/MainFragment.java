@@ -35,9 +35,13 @@ public class MainFragment extends Fragment {
 
        // Utils.clearSharedPreferences(getActivity());
 
-        initRecViews();
-
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initRecViews();
     }
 
     private void initRecViews(){

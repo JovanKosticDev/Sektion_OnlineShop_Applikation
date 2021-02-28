@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,8 +18,18 @@ import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 
-public class GroceryItemActivity extends AppCompatActivity {
+public class GroceryItemActivity extends AppCompatActivity implements AddReviewDialog.AddReview {
     private static final String TAG = "GroceryItemActivity";
+
+    @Override
+    public void onAddReviewResult(Review review) {
+        Log.d(TAG, "onAddReviewResult: new review: " + review);
+        Utils.addReview(this, review);
+        ArrayList<Review> reviews = Utils.getReviewsByID(this, review.getGroceryItemId());
+        if(null != reviews){
+            adapter.setReviews(reviews);
+        }
+    }
 
     public static final String GROCERY_ITEM_KEY = "incoming_item";
 
@@ -31,6 +42,8 @@ public class GroceryItemActivity extends AppCompatActivity {
 
     private GroceryItem incomingItem;
 
+    private ReviewsAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +51,8 @@ public class GroceryItemActivity extends AppCompatActivity {
 
         initViews();
         setSupportActionBar(toolbar);
+
+        adapter = new ReviewsAdapter();
 
 
         Intent intent = getIntent();
@@ -51,26 +66,31 @@ public class GroceryItemActivity extends AppCompatActivity {
                         .asBitmap()
                         .load(incomingItem.getImageUrl())
                         .into(itemImage);
-                ArrayList<Review> reviews = incomingItem.getReviews();
+                ArrayList<Review> reviews = Utils.getReviewsByID(this, incomingItem.getId());
+                reviewsRecView.setAdapter(adapter);
+                reviewsRecView.setLayoutManager(new LinearLayoutManager(this));
                 if(null != reviews){
                     if(reviews.size() > 0){
-                        ReviewsAdapter adapter = new ReviewsAdapter();
-                        reviewsRecView.setAdapter(adapter);
-                        reviewsRecView.setLayoutManager(new LinearLayoutManager(this));
                         adapter.setReviews(reviews);
                     }
                 }
                 btnAddToCart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // TODO: 27.02.2021 Add item to the cart
+                        // TODO: 27.02.2021 Navigiere den user zur CartActivity
+                        Utils.addItemToCart(GroceryItemActivity.this, incomingItem);
+                        Log.d(TAG, "onClick: cart items: " + Utils.getCartItems(GroceryItemActivity.this));
                     }
                 });
 
                 txtAddReview.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // TODO: 27.02.2021 Show a dialog
+                        AddReviewDialog dialog = new AddReviewDialog();
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(GROCERY_ITEM_KEY, incomingItem);
+                        dialog.setArguments(bundle);
+                        dialog.show(getSupportFragmentManager(), "add review");
                     }
                 });
                 handleRating();

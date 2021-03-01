@@ -6,12 +6,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+
+import static com.example.javaonlineshop.AllCategoriesDialog.ALL_CATEGORIES;
+import static com.example.javaonlineshop.AllCategoriesDialog.CALLING_ACTIVITY;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +44,14 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()){
                     case R.id.cart:
                         Toast.makeText(MainActivity.this, "Warenkorb ausgewählt", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.categories:
+                        AllCategoriesDialog dialog = new AllCategoriesDialog();
+                        Bundle bundle = new Bundle();
+                        bundle.putStringArrayList(ALL_CATEGORIES, Utils.getCategories(MainActivity.this));
+                        bundle.putString(CALLING_ACTIVITY, "main_activity");
+                        dialog.setArguments(bundle);
+                        dialog.show(getSupportFragmentManager(), "all categories dialog");
                         break;
                     default:
                         break;

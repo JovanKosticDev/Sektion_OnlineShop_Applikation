@@ -112,6 +112,9 @@ public class MainFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case R.id.cart:
+                        Intent cartIntent = new Intent(getActivity(), CartActivity.class);
+                        cartIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(cartIntent);
                         break;
                     default:
                         break;

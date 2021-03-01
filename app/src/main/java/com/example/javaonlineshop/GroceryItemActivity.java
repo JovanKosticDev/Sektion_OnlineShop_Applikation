@@ -77,9 +77,10 @@ public class GroceryItemActivity extends AppCompatActivity implements AddReviewD
                 btnAddToCart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // TODO: 27.02.2021 Navigiere den user zur CartActivity
                         Utils.addItemToCart(GroceryItemActivity.this, incomingItem);
-                        Log.d(TAG, "onClick: cart items: " + Utils.getCartItems(GroceryItemActivity.this));
+                        Intent cartIntent = new Intent(GroceryItemActivity.this, CartActivity.class);
+                        cartIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(cartIntent);
                     }
                 });
 

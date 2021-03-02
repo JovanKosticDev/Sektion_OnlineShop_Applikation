@@ -13,6 +13,8 @@ import java.util.ArrayList;
 public class Utils {
 
     private static int ID = 0;
+    private static int ORDER_ID = 0;
+
     private static final String ALL_ITEMS_KEY = "all_items";
     private static final String DB_NAME = "fake_database";
     private static final String CART_ITEMS_KEY = "cart_items";
@@ -266,6 +268,11 @@ public class Utils {
     public static int getID() {
         ID++;
         return ID;
+    }
+
+    public static int getOrderId() {
+        ORDER_ID++;
+        return ORDER_ID;
     }
 }
 

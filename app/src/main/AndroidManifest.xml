@@ -11,8 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.JavaOnlineShop">
-        <activity android:name=".CartActivity"></activity>
-        <activity android:name=".SearchActivity" />
+        <activity android:name=".CartActivity"
+            android:windowSoftInputMode="adjustPan|adjustResize"></activity>
+        <activity android:name=".SearchActivity"
+            android:windowSoftInputMode="adjustPan|adjustResize"/>
         <activity android:name=".GroceryItemActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

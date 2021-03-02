@@ -265,6 +265,35 @@ public class Utils {
         }
     }
 
+    public static void clearCartItems(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(DB_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(CART_ITEMS_KEY);
+        editor.commit();
+    }
+
+    public static void increasePopularityPoint(Context context, GroceryItem item, int points){
+        ArrayList<GroceryItem> allItems = getAllItems(context);
+        if(null != allItems){
+            ArrayList<GroceryItem> newItems = new ArrayList<>();
+            for(GroceryItem i : allItems){
+                if(i.getId() == item.getId()){
+                    i.setPopularityPoint(i.getPopularityPoint() + points);
+                    newItems.add(i);
+                }else{
+                    newItems.add(i);
+                }
+            }
+
+            SharedPreferences sharedPreferences = context.getSharedPreferences(DB_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(ALL_ITEMS_KEY);
+            Gson gson = new Gson();
+            editor.putString(ALL_ITEMS_KEY, gson.toJson(newItems));
+            editor.commit();
+        }
+    }
+
     public static int getID() {
         ID++;
         return ID;

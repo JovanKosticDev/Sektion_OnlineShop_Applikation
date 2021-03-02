@@ -1,6 +1,7 @@
 package com.example.javaonlineshop;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,18 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 import static com.example.javaonlineshop.SecondCartFragment.ORDER_KEY;
 
 public class ThirdCartFragment extends Fragment {
-
+    private static final String TAG = "ThirdCartFragment";
     private Button btnBack, btnCheckout;
     private TextView txtItems, txtAdress, txtPhoneNumber, txtTotalPrice;
     private RadioGroup rgPayment;
@@ -81,6 +90,47 @@ public class ThirdCartFragment extends Fragment {
                             order.setSuccess(true);
 
                             // TODO: 02.03.2021 Sende deine Anfrage mit Retrofit
+
+                            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor()
+                                    .setLevel(HttpLoggingInterceptor.Level.BODY);
+
+                            OkHttpClient client = new OkHttpClient.Builder()
+                                    .addInterceptor(interceptor)
+                                    .build();
+
+                            Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl("https://jsonplaceholder.typicode.com/")
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .client(client)
+                                    .build();
+
+                            OrderEndpoint endpoint = retrofit.create(OrderEndpoint.class);
+                            Call<Order> call = endpoint.newOrder(order);
+                            call.enqueue(new Callback<Order>() {
+                                @Override
+                                public void onResponse(Call<Order> call, Response<Order> response) {
+                                    Log.d(TAG, "onResponse: code: " + response.code());
+                                    if(response.isSuccessful()){
+                                        Bundle resultBundle = new Bundle();
+                                        resultBundle.putString(ORDER_KEY, gson.toJson(response.body()));
+                                        PaymentResultFragment paymentResultFragment = new PaymentResultFragment();
+                                        paymentResultFragment.setArguments(resultBundle);
+                                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                        transaction.replace(R.id.container, paymentResultFragment);
+                                        transaction.commit();
+                                    }else{
+                                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                        transaction.replace(R.id.container, new PaymentResultFragment());
+                                        transaction.commit();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Order> call, Throwable t) {
+                                    t.printStackTrace();
+                                }
+                            });
+
                         }
                     });
                 }

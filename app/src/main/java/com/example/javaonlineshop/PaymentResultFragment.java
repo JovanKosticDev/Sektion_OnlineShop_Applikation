@@ -43,6 +43,7 @@ public class PaymentResultFragment extends Fragment {
                         Utils.clearCartItems(getActivity());
                         for (GroceryItem item : order.getItems()){
                             Utils.increasePopularityPoint(getActivity(), item, 1);
+                            Utils.changeUserPoint(getActivity(), item, 4);
                         }
                     }else{
                         txtMessage.setText("Zahlung fehlgeschlagen\nVersuche eine andere Zahlmethode.");

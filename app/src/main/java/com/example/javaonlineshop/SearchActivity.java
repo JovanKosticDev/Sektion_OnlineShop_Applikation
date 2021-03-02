@@ -34,6 +34,7 @@ public class SearchActivity extends AppCompatActivity implements AllCategoriesDi
         ArrayList<GroceryItem> items = Utils.getItemsByCategory(this, category);
         if(null != items){
             adapter.setItems(items);
+            increaseUserPoint(items);
         }
     }
 
@@ -66,6 +67,7 @@ public class SearchActivity extends AppCompatActivity implements AllCategoriesDi
                 ArrayList<GroceryItem> items = Utils.getItemsByCategory(this, category);
                 if(null != items){
                     adapter.setItems(items);
+                    increaseUserPoint(items);
                 }
             }
         }
@@ -121,6 +123,13 @@ public class SearchActivity extends AppCompatActivity implements AllCategoriesDi
 
     }
 
+    private void increaseUserPoint(ArrayList<GroceryItem> items){
+        for (GroceryItem i : items){
+            Utils.changeUserPoint(this, i, 1);
+        }
+
+    }
+
     private void showCategories(ArrayList<String> categories, int i){
         switch (i){
             case 1:
@@ -134,6 +143,7 @@ public class SearchActivity extends AppCompatActivity implements AllCategoriesDi
                         ArrayList<GroceryItem> items = Utils.getItemsByCategory(SearchActivity.this, categories.get(0));
                         if(null != items){
                             adapter.setItems(items);
+                            increaseUserPoint(items);
                         }
                     }
                 });
@@ -150,6 +160,7 @@ public class SearchActivity extends AppCompatActivity implements AllCategoriesDi
                         ArrayList<GroceryItem> items = Utils.getItemsByCategory(SearchActivity.this, categories.get(0));
                         if(null != items){
                             adapter.setItems(items);
+                            increaseUserPoint(items);
                         }
                     }
                 });
@@ -159,6 +170,7 @@ public class SearchActivity extends AppCompatActivity implements AllCategoriesDi
                         ArrayList<GroceryItem> items = Utils.getItemsByCategory(SearchActivity.this, categories.get(1));
                         if(null != items){
                             adapter.setItems(items);
+                            increaseUserPoint(items);
                         }
                     }
                 });
@@ -176,6 +188,7 @@ public class SearchActivity extends AppCompatActivity implements AllCategoriesDi
                         ArrayList<GroceryItem> items = Utils.getItemsByCategory(SearchActivity.this, categories.get(0));
                         if(null != items){
                             adapter.setItems(items);
+                            increaseUserPoint(items);
                         }
                     }
                 });
@@ -185,6 +198,7 @@ public class SearchActivity extends AppCompatActivity implements AllCategoriesDi
                         ArrayList<GroceryItem> items = Utils.getItemsByCategory(SearchActivity.this, categories.get(1));
                         if(null != items){
                             adapter.setItems(items);
+                            increaseUserPoint(items);
                         }
                     }
                 });
@@ -194,6 +208,7 @@ public class SearchActivity extends AppCompatActivity implements AllCategoriesDi
                         ArrayList<GroceryItem> items = Utils.getItemsByCategory(SearchActivity.this, categories.get(2));
                         if(null != items){
                             adapter.setItems(items);
+                            increaseUserPoint(items);
                         }
                     }
                 });
@@ -213,6 +228,7 @@ public class SearchActivity extends AppCompatActivity implements AllCategoriesDi
             ArrayList<GroceryItem> items = Utils.searchForItems(this, name);
             if(null != items){
                 adapter.setItems(items);
+                increaseUserPoint(items);
             }
         }
     }
@@ -232,6 +248,9 @@ public class SearchActivity extends AppCompatActivity implements AllCategoriesDi
                     case R.id.search:
                         break;
                     case R.id.cart:
+                        Intent cartIntent = new Intent(SearchActivity.this, CartActivity.class);
+                        cartIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(cartIntent);
                         break;
                     default:
                         break;

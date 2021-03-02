@@ -2,6 +2,7 @@ package com.example.javaonlineshop;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -11,6 +12,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class Utils {
+    private static final String TAG = "Utils";
 
     private static int ID = 0;
     private static int ORDER_ID = 0;
@@ -51,10 +53,10 @@ public class Utils {
                 "Essen", 5.9, 15);
         allItems.add(iceCream);
 
-        GroceryItem soda = new GroceryItem("Gerolsteiner",
+        GroceryItem soda = new GroceryItem("Gerolsteiner 6 x 0.75l",
                 "Lecker, Sprudel! Die kleinen Blubberbläschen sind Kohlensäure, ein Gemisch aus Kohlendioxid und Wasser.",
-                "https://bestino.de/media/image/d7/1e/64/gerolsteiner-medium-0-75l-2439-001_600x600.jpg",
-                "Trinken", 1.18, 25);
+                " https://lebensmittel-versand.eu/media/image/product/15867/md/gerolsteiner-sprudel-6x075l_1.jpg",
+                "Trinken", 5.99, 25);
         allItems.add(soda);
 
         GroceryItem nivea = new GroceryItem("Nivea",
@@ -292,6 +294,26 @@ public class Utils {
             editor.putString(ALL_ITEMS_KEY, gson.toJson(newItems));
             editor.commit();
         }
+    }
+
+    public static void changeUserPoint(Context context, GroceryItem item, int points){
+        Log.d(TAG, "changeUserPoint: Attempting to add " + points + " to " + item.getName());
+        ArrayList<GroceryItem> allItems = getAllItems(context);
+        if(null != allItems){
+            ArrayList<GroceryItem> newItems = new ArrayList<>();
+            for(GroceryItem i : allItems){
+                if(i.getId() == item.getId()){
+                    i.setUserPoint(i.getUserPoint() + points);
+                }
+                newItems.add(i);
+            }
+            SharedPreferences sharedPreferences = context.getSharedPreferences(DB_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(ALL_ITEMS_KEY);
+            editor.putString(ALL_ITEMS_KEY, gson.toJson(newItems));
+            editor.commit();
+        }
+
     }
 
     public static int getID() {

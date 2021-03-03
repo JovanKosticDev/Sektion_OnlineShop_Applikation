@@ -2,10 +2,12 @@ package com.example.javaonlineshop;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -43,7 +45,9 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (item.getItemId()){
                     case R.id.cart:
-                        Toast.makeText(MainActivity.this, "Warenkorb ausgewählt", Toast.LENGTH_SHORT).show();
+                        Intent cartIntent = new Intent(MainActivity.this, CartActivity.class);
+                        cartIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(cartIntent);
                         break;
                     case R.id.categories:
                         AllCategoriesDialog dialog = new AllCategoriesDialog();
@@ -52,6 +56,33 @@ public class MainActivity extends AppCompatActivity {
                         bundle.putString(CALLING_ACTIVITY, "main_activity");
                         dialog.setArguments(bundle);
                         dialog.show(getSupportFragmentManager(), "all categories dialog");
+                        break;
+                    case R.id.about:
+                        new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("Über uns")
+                                .setMessage("Entwickelt von Jovan Kostic,\n" + "Klicke auf den Link um weitere Kurse zu finden")
+                                .setPositiveButton("Besuche", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent websiteIntent = new Intent(MainActivity.this, WebsiteActivity.class);
+                                        startActivity(websiteIntent);
+                                    }
+                                }).create().show();
+                        break;
+                    case R.id.terms:
+                        new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("Endvertrag")
+                                .setMessage("Es gibt keinen Vertrag, viel Spass mit der Applikation!")
+                                .setPositiveButton("Zurück", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                }).create().show();
+                        break;
+                    case R.id.licences:
+                        LicencesDialog licencesDialog = new LicencesDialog();
+                        licencesDialog.show(getSupportFragmentManager(), "licences");
                         break;
                     default:
                         break;

@@ -11,10 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.JavaOnlineShop">
-        <activity android:name=".CartActivity"
-            android:windowSoftInputMode="adjustPan|adjustResize"></activity>
-        <activity android:name=".SearchActivity"
-            android:windowSoftInputMode="adjustPan|adjustResize"/>
+        <activity android:name=".WebsiteActivity"></activity>
+        <activity
+            android:name=".CartActivity"
+            android:windowSoftInputMode="adjustPan|adjustResize" />
+        <activity
+            android:name=".SearchActivity"
+            android:windowSoftInputMode="adjustPan|adjustResize" />
         <activity android:name=".GroceryItemActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -24,7 +27,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".TrackUserTime"/>
+        <service android:name=".TrackUserTime" />
     </application>
 
 </manifest>
